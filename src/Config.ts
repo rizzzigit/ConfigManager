@@ -145,119 +145,108 @@ export class Manager {
   }
 
   private _isDataQueueRunning: boolean
-  private readonly _dataQueue: Array<(
+  private readonly _dataQueue: Array<
+  (
     {
-      op: 'get'
-      name: string
-      defaultValue?: any
+      op: 'read'
     } | {
-      op: 'set'
-      name: string
-      value: any
-    } | {
-      op: 'has'
-      name: string
-    } | {
-      op: 'delete'
-      name: string
+      op: 'write'
+      data: Data
     }
-  ) & {
+  ) &
+  {
     resolve: (data: any) => void
     reject: (error: Error) => void
-  }>
+  }
+  >
 
   private async _runDataQueue () {
-    const { _dataQueue: dataQueue } = this
-
     if (this._isDataQueueRunning) {
       return
     }
 
     this._isDataQueueRunning = true
     try {
+      const { _dataQueue: dataQueue } = this
+
       while (dataQueue.length) {
         const entry = dataQueue.shift()
-        if (!entry) {
-          continue
-        }
+        if (!entry) { continue }
 
         const { resolve, reject } = entry
-        const data = await this._readData()
+        switch (entry.op) {
+          case 'read':
+            await this._readData().then(resolve, reject)
+            break
 
-        await (async () => {
-          switch (entry.op) {
-            case 'get':
-              return await (async () => {
-                const { name, defaultValue } = entry
-
-                if (data[name] !== undefined) {
-                  return data[name]
-                } else if (defaultValue != null) {
-                  if (typeof (defaultValue) === 'function') {
-                    data[name] = await defaultValue()
-                  } else {
-                    data[name] = defaultValue
-                  }
-
-                  await this._writeData(data)
-                }
-
-                return data[name]
-              })()
-            case 'set':
-              return await (async () => {
-                const { name, value } = entry
-
-                data[name] = value
-                await this._writeData(data)
-              })()
-            case 'has':
-              return await (async () => {
-                const { name } = entry
-
-                return data[name] !== undefined
-              })()
-            case 'delete':
-              return await (async () => {
-                const { name } = entry
-
-                delete data[name]
-                await this._writeData(data)
-              })()
-          }
-        })().then(resolve, reject)
+          case 'write':
+            await this._writeData(entry.data).then(resolve, reject)
+            break
+        }
       }
     } finally {
       this._isDataQueueRunning = false
     }
   }
 
-  public get (name: string, defaultValue?: any) {
-    return new Promise<any>((resolve, reject) => {
-      this._dataQueue.push({ op: 'get', name, defaultValue, resolve, reject })
-      this._runDataQueue()
-    })
+  private _pushToDataQueue (data: (
+    {
+      op: 'read'
+    } | {
+      op: 'write'
+      data: Data
+    }
+  ) &
+  {
+    resolve: (data: any) => void
+    reject: (error: Error) => void
+  }) {
+    this._dataQueue.push(data)
+    this._runDataQueue()
   }
 
-  public set (name: string, value: any) {
-    return new Promise<void>((resolve, reject) => {
-      this._dataQueue.push({ op: 'set', name, value, resolve, reject })
-      this._runDataQueue()
-    })
+  public readData () {
+    return new Promise<Data>((resolve, reject) => this._pushToDataQueue({ op: 'read', resolve, reject }))
   }
 
-  public has (name: string) {
-    return new Promise<boolean>((resolve, reject) => {
-      this._dataQueue.push({ op: 'has', name, resolve, reject })
-      this._runDataQueue()
-    })
+  public writeData (data: Data) {
+    return new Promise<void>((resolve, reject) => this._pushToDataQueue({ op: 'write', data, resolve, reject }))
   }
 
-  public delete (name: string) {
-    return new Promise<void>((resolve, reject) => {
-      this._dataQueue.push({ op: 'delete', name, resolve, reject })
-      this._runDataQueue()
-    })
+  public async get (name: string, defaultValue?: any) {
+    const data = await this.readData()
+
+    if (data[name] !== undefined) {
+      return data[name]
+    } else if (defaultValue != null) {
+      if (typeof (defaultValue) === 'function') {
+        data[name] = await defaultValue()
+      } else {
+        data[name] = defaultValue
+      }
+
+      await this.writeData(data)
+    }
+
+    return data[name]
+  }
+
+  public async set (name: string, value: any) {
+    const data = await this.readData()
+
+    data[name] = value
+    await this.writeData(data)
+  }
+
+  public async has (name: string) {
+    const data = await this.readData()
+    return data[name] !== undefined
+  }
+
+  public async delete (name: string) {
+    const data = await this.readData()
+    delete data[name]
+    await this.writeData(data)
   }
 
   public newInstance (options?: Partial<Options>) {
@@ -267,3 +256,14 @@ export class Manager {
     })
   }
 }
+
+const run = async () => {
+  const manager = new Manager({
+    name: 'ok'
+  })
+
+  await manager.set('asd', 'asd')
+  await manager.set('asd2', 'asd')
+}
+
+run()

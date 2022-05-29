@@ -207,166 +207,138 @@ var Manager = /** @class */ (function () {
     };
     Manager.prototype._runDataQueue = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var dataQueue, _loop_1, this_1;
-            var _this = this;
-            return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
+            var dataQueue, entry, resolve, reject, _a;
+            return tslib_1.__generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        dataQueue = this._dataQueue;
                         if (this._isDataQueueRunning) {
                             return [2 /*return*/];
                         }
                         this._isDataQueueRunning = true;
-                        _a.label = 1;
+                        _b.label = 1;
                     case 1:
-                        _a.trys.push([1, , 5, 6]);
-                        _loop_1 = function () {
-                            var entry, resolve, reject, data;
-                            return tslib_1.__generator(this, function (_b) {
-                                switch (_b.label) {
-                                    case 0:
-                                        entry = dataQueue.shift();
-                                        if (!entry) {
-                                            return [2 /*return*/, "continue"];
-                                        }
-                                        resolve = entry.resolve, reject = entry.reject;
-                                        return [4 /*yield*/, this_1._readData()];
-                                    case 1:
-                                        data = _b.sent();
-                                        return [4 /*yield*/, (function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                                                var _a;
-                                                var _this = this;
-                                                return tslib_1.__generator(this, function (_b) {
-                                                    switch (_b.label) {
-                                                        case 0:
-                                                            _a = entry.op;
-                                                            switch (_a) {
-                                                                case 'get': return [3 /*break*/, 1];
-                                                                case 'set': return [3 /*break*/, 3];
-                                                                case 'has': return [3 /*break*/, 5];
-                                                                case 'delete': return [3 /*break*/, 7];
-                                                            }
-                                                            return [3 /*break*/, 9];
-                                                        case 1: return [4 /*yield*/, (function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                                                                var name, defaultValue, _a, _b;
-                                                                return tslib_1.__generator(this, function (_c) {
-                                                                    switch (_c.label) {
-                                                                        case 0:
-                                                                            name = entry.name, defaultValue = entry.defaultValue;
-                                                                            if (!(data[name] !== undefined)) return [3 /*break*/, 1];
-                                                                            return [2 /*return*/, data[name]];
-                                                                        case 1:
-                                                                            if (!(defaultValue != null)) return [3 /*break*/, 6];
-                                                                            if (!(typeof (defaultValue) === 'function')) return [3 /*break*/, 3];
-                                                                            _a = data;
-                                                                            _b = name;
-                                                                            return [4 /*yield*/, defaultValue()];
-                                                                        case 2:
-                                                                            _a[_b] = _c.sent();
-                                                                            return [3 /*break*/, 4];
-                                                                        case 3:
-                                                                            data[name] = defaultValue;
-                                                                            _c.label = 4;
-                                                                        case 4: return [4 /*yield*/, this._writeData(data)];
-                                                                        case 5:
-                                                                            _c.sent();
-                                                                            _c.label = 6;
-                                                                        case 6: return [2 /*return*/, data[name]];
-                                                                    }
-                                                                });
-                                                            }); })()];
-                                                        case 2: return [2 /*return*/, _b.sent()];
-                                                        case 3: return [4 /*yield*/, (function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                                                                var name, value;
-                                                                return tslib_1.__generator(this, function (_a) {
-                                                                    switch (_a.label) {
-                                                                        case 0:
-                                                                            name = entry.name, value = entry.value;
-                                                                            data[name] = value;
-                                                                            return [4 /*yield*/, this._writeData(data)];
-                                                                        case 1:
-                                                                            _a.sent();
-                                                                            return [2 /*return*/];
-                                                                    }
-                                                                });
-                                                            }); })()];
-                                                        case 4: return [2 /*return*/, _b.sent()];
-                                                        case 5: return [4 /*yield*/, (function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                                                                var name;
-                                                                return tslib_1.__generator(this, function (_a) {
-                                                                    name = entry.name;
-                                                                    return [2 /*return*/, data[name] !== undefined];
-                                                                });
-                                                            }); })()];
-                                                        case 6: return [2 /*return*/, _b.sent()];
-                                                        case 7: return [4 /*yield*/, (function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                                                                var name;
-                                                                return tslib_1.__generator(this, function (_a) {
-                                                                    switch (_a.label) {
-                                                                        case 0:
-                                                                            name = entry.name;
-                                                                            delete data[name];
-                                                                            return [4 /*yield*/, this._writeData(data)];
-                                                                        case 1:
-                                                                            _a.sent();
-                                                                            return [2 /*return*/];
-                                                                    }
-                                                                });
-                                                            }); })()];
-                                                        case 8: return [2 /*return*/, _b.sent()];
-                                                        case 9: return [2 /*return*/];
-                                                    }
-                                                });
-                                            }); })().then(resolve, reject)];
-                                    case 2:
-                                        _b.sent();
-                                        return [2 /*return*/];
-                                }
-                            });
-                        };
-                        this_1 = this;
-                        _a.label = 2;
+                        _b.trys.push([1, , 9, 10]);
+                        dataQueue = this._dataQueue;
+                        _b.label = 2;
                     case 2:
-                        if (!dataQueue.length) return [3 /*break*/, 4];
-                        return [5 /*yield**/, _loop_1()];
-                    case 3:
-                        _a.sent();
-                        return [3 /*break*/, 2];
-                    case 4: return [3 /*break*/, 6];
-                    case 5:
+                        if (!dataQueue.length) return [3 /*break*/, 8];
+                        entry = dataQueue.shift();
+                        if (!entry) {
+                            return [3 /*break*/, 2];
+                        }
+                        resolve = entry.resolve, reject = entry.reject;
+                        _a = entry.op;
+                        switch (_a) {
+                            case 'read': return [3 /*break*/, 3];
+                            case 'write': return [3 /*break*/, 5];
+                        }
+                        return [3 /*break*/, 7];
+                    case 3: return [4 /*yield*/, this._readData().then(resolve, reject)];
+                    case 4:
+                        _b.sent();
+                        return [3 /*break*/, 7];
+                    case 5: return [4 /*yield*/, this._writeData(entry.data).then(resolve, reject)];
+                    case 6:
+                        _b.sent();
+                        return [3 /*break*/, 7];
+                    case 7: return [3 /*break*/, 2];
+                    case 8: return [3 /*break*/, 10];
+                    case 9:
                         this._isDataQueueRunning = false;
                         return [7 /*endfinally*/];
-                    case 6: return [2 /*return*/];
+                    case 10: return [2 /*return*/];
                 }
             });
         });
     };
-    Manager.prototype.get = function (name, defaultValue) {
+    Manager.prototype._pushToDataQueue = function (data) {
+        this._dataQueue.push(data);
+        this._runDataQueue();
+    };
+    Manager.prototype.readData = function () {
         var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this._dataQueue.push({ op: 'get', name: name, defaultValue: defaultValue, resolve: resolve, reject: reject });
-            _this._runDataQueue();
+        return new Promise(function (resolve, reject) { return _this._pushToDataQueue({ op: 'read', resolve: resolve, reject: reject }); });
+    };
+    Manager.prototype.writeData = function (data) {
+        var _this = this;
+        return new Promise(function (resolve, reject) { return _this._pushToDataQueue({ op: 'write', data: data, resolve: resolve, reject: reject }); });
+    };
+    Manager.prototype.get = function (name, defaultValue) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var data, _a, _b;
+            return tslib_1.__generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, this.readData()];
+                    case 1:
+                        data = _c.sent();
+                        if (!(data[name] !== undefined)) return [3 /*break*/, 2];
+                        return [2 /*return*/, data[name]];
+                    case 2:
+                        if (!(defaultValue != null)) return [3 /*break*/, 7];
+                        if (!(typeof (defaultValue) === 'function')) return [3 /*break*/, 4];
+                        _a = data;
+                        _b = name;
+                        return [4 /*yield*/, defaultValue()];
+                    case 3:
+                        _a[_b] = _c.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        data[name] = defaultValue;
+                        _c.label = 5;
+                    case 5: return [4 /*yield*/, this.writeData(data)];
+                    case 6:
+                        _c.sent();
+                        _c.label = 7;
+                    case 7: return [2 /*return*/, data[name]];
+                }
+            });
         });
     };
     Manager.prototype.set = function (name, value) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this._dataQueue.push({ op: 'set', name: name, value: value, resolve: resolve, reject: reject });
-            _this._runDataQueue();
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var data;
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.readData()];
+                    case 1:
+                        data = _a.sent();
+                        data[name] = value;
+                        return [4 /*yield*/, this.writeData(data)];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
     };
     Manager.prototype.has = function (name) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this._dataQueue.push({ op: 'has', name: name, resolve: resolve, reject: reject });
-            _this._runDataQueue();
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var data;
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.readData()];
+                    case 1:
+                        data = _a.sent();
+                        return [2 /*return*/, data[name] !== undefined];
+                }
+            });
         });
     };
     Manager.prototype["delete"] = function (name) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this._dataQueue.push({ op: 'delete', name: name, resolve: resolve, reject: reject });
-            _this._runDataQueue();
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var data;
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.readData()];
+                    case 1:
+                        data = _a.sent();
+                        delete data[name];
+                        return [4 /*yield*/, this.writeData(data)];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
     };
     Manager.prototype.newInstance = function (options) {
@@ -375,3 +347,22 @@ var Manager = /** @class */ (function () {
     return Manager;
 }());
 exports.Manager = Manager;
+var run = function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var manager;
+    return tslib_1.__generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                manager = new Manager({
+                    name: 'ok'
+                });
+                return [4 /*yield*/, manager.set('asd', 'asd')];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, manager.set('asd2', 'asd')];
+            case 2:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
+run();

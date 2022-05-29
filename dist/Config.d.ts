@@ -28,6 +28,9 @@ export declare class Manager {
     private _isDataQueueRunning;
     private readonly _dataQueue;
     private _runDataQueue;
+    private _pushToDataQueue;
+    readData(): Promise<Data>;
+    writeData(data: Data): Promise<void>;
     get(name: string, defaultValue?: any): Promise<any>;
     set(name: string, value: any): Promise<void>;
     has(name: string): Promise<boolean>;
