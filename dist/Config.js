@@ -346,22 +346,3 @@ var Manager = /** @class */ (function () {
     return Manager;
 }());
 exports.Manager = Manager;
-var run = function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var manager;
-    return tslib_1.__generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                manager = new Manager({
-                    name: 'ok'
-                });
-                return [4 /*yield*/, manager.set('asd', 'asd')];
-            case 1:
-                _a.sent();
-                return [4 /*yield*/, manager.set('asd2', 'asd')];
-            case 2:
-                _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); };
-run();

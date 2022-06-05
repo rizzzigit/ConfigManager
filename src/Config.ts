@@ -256,14 +256,3 @@ export class Manager {
     })
   }
 }
-
-const run = async () => {
-  const manager = new Manager({
-    name: 'ok'
-  })
-
-  await manager.set('asd', 'asd')
-  await manager.set('asd2', 'asd')
-}
-
-run()
