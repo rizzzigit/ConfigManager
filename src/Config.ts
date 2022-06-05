@@ -218,7 +218,7 @@ export class Manager {
 
     if (data[name] !== undefined) {
       return data[name]
-    } else if (defaultValue != null) {
+    } else {
       if (typeof (defaultValue) === 'function') {
         data[name] = await defaultValue()
       } else {

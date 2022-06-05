@@ -274,7 +274,6 @@ var Manager = /** @class */ (function () {
                         if (!(data[name] !== undefined)) return [3 /*break*/, 2];
                         return [2 /*return*/, data[name]];
                     case 2:
-                        if (!(defaultValue != null)) return [3 /*break*/, 7];
                         if (!(typeof (defaultValue) === 'function')) return [3 /*break*/, 4];
                         _a = data;
                         _b = name;
